@@ -1,0 +1,10 @@
+# 目标
+string pickup_point      # 取物点
+string delivery_point    # 送达点
+---
+# 结果
+bool success
+string message
+---
+# 反馈
+string current_state     # 当前状态

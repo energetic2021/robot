@@ -1,0 +1,23 @@
+<launch>
+    <!-- 参数配置 -->
+    <arg name="pickup_point" default="1" />
+    <arg name="delivery_point" default="2" />
+    <arg name="target_drawer" default="1" />
+    <arg name="drawer_open_duration" default="30" />
+    <arg name="stop_delay" default="2.0" />
+    <arg name="start_drawer" default="true" />
+    
+    <!-- 条件判断：是否启动抽屉控制系统 -->
+    <!-- <group if="$(arg start_drawer)">
+        <include file="$(find zj_base)/launch/drawer_control.launch"/>
+    </group> -->
+    
+    <!-- 启动运输任务服务器 -->
+    <node name="transport_server" pkg="hospital_transport" type="transport_server.py" output="screen">
+        <param name="pickup_point" value="$(arg pickup_point)" />
+        <param name="delivery_point" value="$(arg delivery_point)" />
+        <param name="target_drawer" value="$(arg target_drawer)" />
+        <param name="drawer_open_duration" value="$(arg drawer_open_duration)" />
+        <param name="stop_delay" value="$(arg stop_delay)" />
+    </node>
+</launch>

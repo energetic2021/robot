@@ -1,0 +1,11 @@
+*.pcm
+*.tar
+tmp/
+natapp
+*.bag
+*.o
+*.so
+devel/
+build/
+.vscode/
+.idea/

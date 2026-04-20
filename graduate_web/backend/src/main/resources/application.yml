@@ -1,0 +1,46 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: hospital-management
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/hospital_management?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.hospital.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+jwt:
+  secret: hospitalManagementSystemSecretKey2023
+  expiration: 86400000  # 24小时
+
+# CORS 允许的前端来源（本地 + natapp 穿透域名，换域名时改这里即可）
+cors:
+  allowed-origins: http://localhost:3000,http://localhost:5173,http://j9369942.natappfree.cc,https://j9369942.natappfree.cc
+
+# ROS配置（与 teleop_twist_keyboard 一致：/cmd_vel:=/mobile_base_controller/cmd_vel）
+ros:
+  bridge:
+    host: 127.0.0.1
+    port: 9090
+    connection-timeout: 5000
+    reconnect-interval: 5000
+    service-timeout: 5000
+  cmd-vel-topic: /mobile_base_controller/cmd_vel
+  # 多点导航航点话题（与 waterplus navi_waypoint 一致，订阅 /waterplus/navi_result 获取结果）
+  navi-waypoint-topic: /waterplus/navi_waypoint
+  # 取物送物 Action：goal / cancel 话题
+  transport-goal-topic: /hospital_transport/goal
+  transport-cancel-topic: /hospital_transport/cancel

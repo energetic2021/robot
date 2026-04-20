@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- 参数配置 -->
+  <arg name="pcm_device" default="-1"/>
+  <arg name="work_dir" default="$(find voice_service)/resources"/>
+  <arg name="cfg_path" default="cfg/aiui.cfg"/>
+  <arg name="debug" default="false"/>
+
+  <!-- 设置环境变量 -->
+  <env name="LD_LIBRARY_PATH" value="$(find voice_service)/lib:$(env LD_LIBRARY_PATH)" />
+  <env name="AIUI_WORK_DIR" value="$(arg work_dir)" />
+
+  <!-- 启动节点 -->
+  <node name="aiui_node" pkg="voice_service" type="voice_service_node" 
+        output="screen" required="true">
+    
+    <!-- 传递参数 -->
+    <param name="pcm_device_index" value="$(arg pcm_device)"/>
+    <param name="work_dir" value="$(arg work_dir)"/>
+    <param name="cfg_path" value="$(arg cfg_path)"/>
+    <param name="debug" value="$(arg debug)"/>
+  </node>
+</launch>

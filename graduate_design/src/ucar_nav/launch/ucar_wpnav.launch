@@ -1,0 +1,55 @@
+<launch>
+
+  <!-- Run the map server -->
+  <!-- <node name="map_server" pkg="map_server" type="map_server" args="$(find ucar_nav)/maps/zj.yaml" output="screen"> -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find ucar_nav)/maps/zj_modified.yaml" output="screen">
+   <param name="frame_id" value="map" />
+  </node> 
+
+  <!-- 话题桥接：将标准话题映射到您的控制器话题 -->
+  <node name="cmd_vel_bridge" pkg="topic_tools" type="relay" 
+        args="/cmd_vel /mobile_base_controller/cmd_vel"/>
+  <node name="odom_bridge" pkg="topic_tools" type="relay" 
+        args="/mobile_base_controller/odom /odom"/>
+
+  <!--<param name="base_global_planner" value="voronoi_planner/VoronoiPlanner"/>  -->
+
+  <include file="$(find ucar_nav)/launch/config/amcl/amcl_omni.launch" > </include>
+  
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <!-- 话题重映射 -->
+    <remap from="cmd_vel" to="/mobile_base_controller/cmd_vel"/>
+    <remap from="odom" to="/mobile_base_controller/odom"/>
+    
+    <param name="base_global_planner" value="global_planner/GlobalPlanner"/>
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS"/>
+    <rosparam file="$(find ucar_nav)/launch/config/move_base/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find ucar_nav)/launch/config/move_base/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find ucar_nav)/launch/config/move_base/global_planner_params.yaml" command="load" />
+    <rosparam file="$(find ucar_nav)/launch/config/move_base/teb_local_planner_params.yaml" command="load" />
+    <rosparam file="$(find ucar_nav)/launch/config/move_base/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find ucar_nav)/launch/config/move_base/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find ucar_nav)/launch/config/move_base/move_base_params.yaml" command="load" />
+
+   <!-- <param name="planner_frequency" value="0"/>
+    <param name="planner_patience" value="0"/>
+    <param name="controller_frequency" value="0.1"/>
+    <param name="controller_patience" value="1.0"/>
+    <param name="clearing_rotation_allowed" value="false"/>-->
+  </node>
+  
+  <!-- rosparam command="load" file="$(find ucar_nav)/launch/config/move_base/my_navigation.yaml"/ -->
+  <!--<node pkg="rviz" type="rviz" name="rviz" required="true"
+      args="-d $(find ucar_nav)/launch/config/rviz/tebrviz.rviz"/>-->
+
+  <!-- Map tools  -->
+  <node pkg="waterplus_map_tools" type="wp_manager" name="wp_manager" output="screen" />
+
+  <!-- Navi server  -->
+  <node pkg="waterplus_map_tools" type="wp_navi_server" name="wp_navi_server" output="screen" />
+
+  <arg name="rvizconfig" default="$(find ucar_nav)/rviz/map_tool.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)"/>
+  <node name="navi_result_listener" pkg="ucar_nav" type="detect.py" output="screen" />
+
+</launch>

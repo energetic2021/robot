@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- ============================================ -->
+    <!-- RTAB-Map 深度相机建图（最终完美版）          -->
+    <!-- ============================================ -->
+
+    <!-- 参数定义 -->
+    <arg name="rgb_topic" default="/depth_camera/image_raw" />
+    <arg name="depth_topic" default="/depth_camera/depth/image_raw" />
+    <arg name="camera_info_topic" default="/depth_camera/camera_info" />
+    <arg name="frame_id" default="base_footprint" />
+    <arg name="rtabmap_args" default="--delete_db_on_start" />
+
+    <!-- ===== 第1组：修复 camera_info（手动发布） ===== -->
+    <node name="camera_info_publisher" pkg="rostopic" type="rostopic" 
+          args="pub $(arg camera_info_topic) sensor_msgs/CameraInfo 
+                '{header: {frame_id: depth_camera}, 
+                  width: 640, height: 480, 
+                  distortion_model: plumb_bob,
+                  K: [500.0, 0.0, 320.0, 0.0, 500.0, 240.0, 0.0, 0.0, 1.0],
+                  R: [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+                  P: [500.0, 0.0, 320.0, 0.0, 0.0, 500.0, 240.0, 0.0, 0.0, 0.0, 1.0, 0.0]}' 
+                -r 30"
+          output="screen"/>
+
+    <!-- ===== 第2组：静态TF发布（深度相机位置） ===== -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="depth_camera_tf"
+          args="0.16 0.0 0.4625 -1.57 0 -1.57 base_link depth_camera"
+          output="screen">
+        <param name="publish_frequency" value="50.0"/>
+    </node>
+
+    <!-- ===== 第3组：RTAB-Map 核心节点（彻底禁用odom） ===== -->
+    <node name="rtabmap" pkg="rtabmap_slam" type="rtabmap" output="screen" args="$(arg rtabmap_args)">
+        <!-- 话题重映射 - 只重映射需要的话题 -->
+        <remap from="rgb/image" to="$(arg rgb_topic)"/>
+        <remap from="depth/image" to="$(arg depth_topic)"/>
+        <remap from="rgb/camera_info" to="$(arg camera_info_topic)"/>
+        
+        <!-- 不订阅激光和odom -->
+        <param name="subscribe_scan" value="false"/>
+        <param name="subscribe_odom" value="false"/>
+        
+        <!-- 通用参数 -->
+        <param name="frame_id" value="$(arg frame_id)"/>
+        <param name="subscribe_depth" value="true"/>
+        <param name="queue_size" value="30"/>
+        <param name="sync_queue_size" value="30"/>
+        <param name="approx_sync" value="true"/>
+        <param name="wait_imu_to_init" value="false"/>
+        
+        <!-- RTAB-Map 核心建图参数 -->
+        <param name="RGBD/LinearUpdate" value="0.05"/>
+        <param name="RGBD/AngularUpdate" value="0.05"/>
+        <param name="Rtabmap/TimeThr" value="700"/>
+        <param name="Rtabmap/MemoryThr" value="2000"/>
+        <param name="Kp/MaxFeatures" value="1000"/>
+        
+        <!-- 2D栅格地图参数 -->
+        <param name="Grid/RangeMax" value="5.0"/>
+        <param name="Grid/CellSize" value="0.05"/>
+        <param name="Grid/DepthDecimation" value="4"/>
+        <param name="Grid/Sensor" value="true"/>
+        
+        <!-- 数据库参数 -->
+        <param name="Mem/IncrementalMemory" value="true"/>
+        <param name="Mem/InitWMWithAllNodes" value="true"/>
+    </node>
+
+    <!-- ===== 第4组：Rviz可视化 ===== -->
+    <node name="rviz" pkg="rviz" type="rviz" required="true" 
+          args="-d /home/zj/graduate_design/src/ucar_nav/rviz/fusion_mapping.rviz"
+          output="screen"/>
+
+</launch>

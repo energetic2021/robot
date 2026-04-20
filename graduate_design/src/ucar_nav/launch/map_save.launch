@@ -1,0 +1,9 @@
+<launch>
+  <!-- 保存地图的节点 [citation:3][citation:6] -->
+  <arg name="map_file" default="/home/zj/graduate_design/src/ucar_nav/maps/fusion_map"/>
+  
+  <node pkg="map_server" type="map_saver" name="map_saver" 
+        args="-f $(arg map_file)" output="screen"/>
+  
+  <echo message="地图已保存到：$(arg map_file).pgm 和 $(arg map_file).yaml"/>
+</launch>

@@ -1,0 +1,23 @@
+# AIUI节点参数
+aiui_node:
+  # PCM设备索引，-1为默认设备
+  pcm_device_index: -1
+  
+  # 配置文件路径（相对于工作目录）
+  cfg_path: "cfg/aiui.cfg"
+  
+  # 是否启用调试模式
+  debug: false
+  
+  # 音频参数
+  audio:
+    sample_rate: 16000
+    channels: 1
+    frame_size: 1280  # 40ms @16kHz
+    
+  # 服务开关
+  features:
+    wakeup: true
+    tts: true
+    voice_clone: true
+    voice_print: true

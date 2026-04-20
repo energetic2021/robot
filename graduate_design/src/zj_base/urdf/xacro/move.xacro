@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<robot name="my_car_complete" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- 属性定义 -->
+  <xacro:property name="base_link_radius" value="0.25" />
+  <xacro:property name="wheel_radius" value="0.075" />
+
+  <!-- ==================== 传动装置宏定义 ==================== -->
+  
+  <!-- 轮子传动装置宏 - Velocity接口 -->
+  <xacro:macro name="wheel_transmission" params="joint_name">
+    <transmission name="${joint_name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${joint_name}_motor">
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <!-- 抽屉传动装置宏 - Effort接口 -->
+  <xacro:macro name="drawer_transmission" params="joint_name">
+    <transmission name="${joint_name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${joint_name}_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <!-- ==================== 应用传动装置 ==================== -->
+  
+  <!-- 轮子传动装置 -->
+  <xacro:wheel_transmission joint_name="left_wheel2base_link" />
+  <xacro:wheel_transmission joint_name="right_wheel2base_link" />
+
+  <!-- 抽屉传动装置 -->
+  <xacro:drawer_transmission joint_name="drawer2base_link"/>
+  <xacro:drawer_transmission joint_name="drawer22base_link"/>
+  <xacro:drawer_transmission joint_name="drawer32base_link"/>
+
+  <!-- ==================== Gazebo 插件配置 ==================== -->
+  
+  <!-- 统一的 Gazebo ROS Control 插件 -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <controlPeriod>0.001</controlPeriod>
+      <!-- 可选：配置所有关节的默认PID -->
+      <jointInterfaceDefaults>
+        <effort>
+          <p>100.0</p>
+          <i>1.0</i>
+          <d>5.0</d>
+        </effort>
+        <velocity>
+          <p>1000.0</p>
+          <i>0.1</i>
+          <d>0.0</d>
+        </velocity>
+      </jointInterfaceDefaults>
+    </plugin>
+  </gazebo>
+
+</robot>

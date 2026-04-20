@@ -1,0 +1,74 @@
+<robot name="depth_camera_sensors" xmlns:xacro="http://wiki.ros.org/xacro">
+  
+  <!-- 深度相机传感器配置 -->
+  <gazebo reference="depth_camera">
+    <!-- 类型设置为 depth -->
+    <sensor type="depth" name="depth_camera_node">
+      <update_rate>30.0</update_rate>
+      
+      <!-- 摄像头基本信息设置 -->
+      <camera name="depth_head">
+        <horizontal_fov>1.52</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>L8</format>  <!-- 改为L8或L16 -->
+        </image>
+        <clip>
+          <near>0.2</near>
+          <far>10.0</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </camera>
+      
+      <!-- 深度图专用参数 -->
+      <depth>
+        <shift>0.0</shift>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.02</stddev>
+        </noise>
+      </depth>
+      
+      <!-- 核心插件 -->
+      <plugin name="gazebo_depth_camera" filename="libgazebo_ros_depth_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>0.0</updateRate>
+        
+        <!-- 相机名称前缀 -->
+        <cameraName>/depth_camera</cameraName>
+        
+        <!-- 深度图像话题 -->
+        <depthImageTopicName>depth/image_raw</depthImageTopicName>
+        <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+        
+        <!-- 点云话题 -->
+        <pointCloudTopicName>depth/points</pointCloudTopicName>
+        <pointCloudSkip>2</pointCloudSkip>
+        
+        <!-- 坐标系 -->
+        <frameName>depth_camera</frameName>
+        
+        <!-- 深度有效范围 -->
+        <pointCloudCutoff>0.2</pointCloudCutoff>
+        <pointCloudCutoffMax>8.0</pointCloudCutoffMax>
+        
+        <!-- 基线距离 -->
+        <hackBaseline>0.05</hackBaseline>
+        
+        <!-- 畸变参数 -->
+        <distortionK1>0.0</distortionK1>
+        <distortionK2>0.0</distortionK2>
+        <distortionK3>0.0</distortionK3>
+        <distortionT1>0.0</distortionT1>
+        <distortionT2>0.0</distortionT2>
+      </plugin>
+    </sensor>
+  </gazebo>
+  
+</robot>

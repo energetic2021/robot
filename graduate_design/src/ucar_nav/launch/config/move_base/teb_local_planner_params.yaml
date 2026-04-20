@@ -1,0 +1,86 @@
+TebLocalPlannerROS:
+  # 基础设置
+  odom_topic: odom                    # 里程计话题名称
+  map_frame: /map                     # 地图坐标系
+
+  # 机器人运动学限制
+  acc_lim_x: 0.24                     # X方向最大加速度(m/s²)，增大可提高响应速度但可能不稳定
+  acc_lim_theta: 2.3                  # 角加速度限制(rad/s²)，增大可提高转向响应
+  max_vel_x: 2.4                      # 最大前进速度(m/s)
+  max_vel_x_backwards: 0.7            # 最大后退速度(m/s)
+  max_vel_theta: 1.2                  # 最大角速度(rad/s)
+  min_turning_radius: 0.0             # 最小转弯半径，0表示无限制
+  is_footprint_dynamic: false         # 是否使用动态足迹
+  
+  # 机器人足迹模型
+  footprint_model:
+    type: "circular"                  # 圆形足迹模型
+    radius: 0.25                      # 圆形半径(m)
+
+  # 目标容差
+  yaw_goal_tolerance: 0.2             # 目标方向容差(rad)，增大更容易到达目标
+  xy_goal_tolerance: 0.1              # 目标位置容差(m)，增大更容易到达目标
+  free_goal_vel: true                 # 到达目标时是否允许有速度
+
+  # 轨迹优化参数
+  teb_autosize: true                  # 自动调整轨迹点数量
+  dt_ref: 0.3                         # 期望时间步长(s)，影响轨迹平滑度
+  dt_hysteresis: 0.1                  # 时间步长滞后范围
+  min_samples: 3                      # 最小轨迹点数量
+  global_plan_overwrite_orientation: true  # 是否覆盖全局路径的方向
+  global_plan_viapoint_sep: -0.1      # 路径点采样间隔，负值表示自动
+  max_global_plan_lookahead_dist: 2.0 # 前瞻全局路径的最大距离(m)
+  force_reinit_new_goal_dist: 1.0     # 强制重新初始化的目标距离
+  feasibility_check_no_poses: 5       # 可行性检查的位姿数量
+  publish_feedback: false             # 是否发布反馈信息
+  allow_init_with_backwards_motion: true  # 是否允许初始后退运动
+  exact_arc_length: false             # 是否使用精确弧长计算
+  shrink_horizon_backup: true         # 是否在接近目标时缩短规划视野
+  shrink_horizon_min_duration: 10.0   # 缩短视野的最小持续时间(s)
+
+  # 障碍物避障参数
+  min_obstacle_dist: 0.15              # 最小障碍物距离(m)，增大安全性但可能无法通过狭窄区域
+  include_costmap_obstacles: true     # 是否包含代价地图障碍物
+  costmap_obstacles_behind_robot_dist: 1.0  # 考虑机器人后方障碍物的距离
+  inflation_dist: 0.15                # 障碍物膨胀距离(m)
+  include_dynamic_obstacles: false    # 是否包含动态障碍物
+  legacy_obstacle_association: false  # 是否使用传统障碍物关联方法
+  obstacle_association_force_inclusion_factor: 1.5  # 强制包含障碍物的因子
+  obstacle_association_cutoff_factor: 5  # 障碍物关联截断因子
+  costmap_converter_plugin: ""        # 代价地图转换插件
+  costmap_converter_spin_thread: true # 是否开启转换线程
+  costmap_converter_rate: 5.0         # 转换频率(Hz)
+
+  # 优化权重参数（重要调节参数）
+  no_inner_iterations: 5              # 内层迭代次数，增大提高优化质量但增加计算量
+  no_outer_iterations: 4              # 外层迭代次数
+  penalty_epsilon: 0.1                # 惩罚项epsilon值
+  weight_acc_lim_x: 1.0               # X加速度权重，增大使运动更平滑
+  weight_acc_lim_theta: 1.0           # 角加速度权重
+  weight_max_vel_x: 2.0               # 最大X速度权重
+  weight_max_vel_theta: 1.0           # 最大角速度权重
+  weight_kinematics_nh: 1100.0        # 非完整约束权重，重要！控制转向能力
+  weight_kinematics_forward_drive: 80.0  # 前进驱动权重，防止过多倒车
+  weight_kinematics_turning_radius: 1.0    # 转弯半径约束权重
+  weight_optimaltime: 1.0             # 时间最优权重，增大使轨迹更快
+  weight_obstacle: 100.0               # 障碍物避让权重，重要！增大避障更积极
+  weight_viapoint: 1.0                # 路径点跟随权重
+  weight_inflation: 5.0               # 膨胀区域权重
+  weight_adapt_factor: 2.0            # 权重自适应因子
+
+  # 同伦类规划（复杂环境有用）
+  enable_homotopy_class_planning: false  # 启用同伦类规划，复杂环境建议true
+  enable_multithreading: true         # 启用多线程
+  max_number_classes: 2               # 最大同伦类数量
+  selection_cost_hysteresis: 1.0      # 选择滞后成本
+  selection_obst_cost_scale: 100.0    # 障碍物成本缩放
+  selection_viapoint_cost_scale: 1.0  # 路径点成本缩放
+  selection_alternative_time_cost: false  # 替代时间成本
+  roadmap_graph_no_samples: 15        # 路线图采样数量
+  roadmap_graph_area_width: 5         # 路线图区域宽度
+  h_signature_prescaler: 1.0          # H签名预缩放
+  h_signature_threshold: 0.1          # H签名阈值
+  obstacle_heading_threshold: 0.45    # 障碍物朝向阈值
+  visualize_hc_graph: false           # 可视化同伦类图
+  viapoints_all_candidates: true      # 所有候选使用路径点
+  switching_blocking_period: 0.0      # 切换阻塞周期

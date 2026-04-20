@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- ============================================ -->
+    <!-- 最终修复版：使用环境变量彻底禁用gmapping TF发布 -->
+    <!-- ============================================ -->
+
+    <!-- 参数定义区 -->
+    <arg name="simulation" default="true"/>
+    <arg name="real_scan_topic" default="/scan"/>
+    <arg name="virtual_scan_topic" default="/virtual_scan"/>
+    <arg name="merged_scan_topic" default="/merged_scan"/>
+    <arg name="output_frame" default="laser"/>
+
+    <!-- ===== 第1组：核心静态TF发布（深度相机） ===== -->
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="depth_camera_tf"
+          args="0.16 0.0 0.4625 -1.57 0 -1.57 base_link depth_camera"
+          output="screen">
+        <param name="publish_frequency" value="50.0"/>
+    </node> -->
+
+    <!-- ===== 第2组：点云转激光 ===== -->
+    <!-- <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node"
+          name="pointcloud_to_laserscan" output="screen"
+          launch-prefix="bash -c 'sleep 1.5; $0 $@'">
+        <remap from="cloud_in" to="/depth_camera/depth/points"/>
+        <remap from="scan" to="$(arg virtual_scan_topic)"/>
+        <param name="target_frame" value="$(arg output_frame)"/>
+        <param name="min_height" value="0.0"/>
+        <param name="max_height" value="1.0"/>
+        <param name="range_min" value="0.2"/>
+        <param name="range_max" value="5.0"/>
+        <param name="transform_tolerance" value="0.2"/>
+    </node> -->
+
+    <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node"
+          name="pointcloud_to_laserscan" output="screen">
+        <remap from="cloud_in" to="/depth_camera/depth/points"/>
+        <remap from="scan" to="/merged_scan"/>
+        <param name="target_frame" value="laser"/>
+        <param name="min_height" value="0.0"/>
+        <param name="max_height" value="1.0"/>
+        <param name="range_min" value="0.2"/>
+        <param name="range_max" value="5.0"/>
+    </node>
+
+
+
+
+
+
+
+
+    <!-- ===== 第3组：激光合并节点 ===== -->
+    <node pkg="ira_laser_tools" type="laserscan_multi_merger"
+          name="scan_merger" output="screen"
+          launch-prefix="bash -c 'sleep 2.5; $0 $@'">
+        <param name="laserscan_topics" value="[/scan, /virtual_scan]"/>
+        <param name="destination_frame" value="$(arg output_frame)"/>
+        <param name="scan_destination_topic" value="$(arg merged_scan_topic)"/>
+        <param name="cloud_destination_topic" value="/merged_cloud"/>
+        <param name="angle_min" value="-3.14"/>
+        <param name="angle_max" value="3.14"/>
+        <param name="range_min" value="0.2"/>
+        <param name="range_max" value="5.0"/>
+    </node>
+
+
+
+    <!-- ===== Gmapping建图节点（正确配置） ===== -->
+    <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
+        <remap from="scan" to="/merged_scan"/>
+        <!-- $(arg merged_scan_topic) -->
+
+        <!-- 坐标系参数（gmapping真正需要的） -->
+        <param name="base_frame" value="base_footprint"/>
+        <param name="odom_frame" value="odom"/>
+        <param name="map_frame" value="map"/>
+
+        <!-- 建图核心参数 -->
+        <param name="map_update_interval" value="5.0"/>
+        <param name="maxUrange" value="4.5"/>
+        <param name="sigma" value="0.05"/>
+        <param name="kernelSize" value="1"/>
+        <param name="lstep" value="0.05"/>
+        <param name="astep" value="0.05"/>
+        <param name="iterations" value="5"/>
+        <param name="lsigma" value="0.075"/>
+        <param name="ogain" value="3.0"/>
+        <param name="lskip" value="0"/>
+        <param name="minimumScore" value="50"/>
+        <param name="srr" value="0.01"/>
+        <param name="srt" value="0.02"/>
+        <param name="str" value="0.01"/>
+        <param name="stt" value="0.02"/>
+        <param name="linearUpdate" value="0.1"/>
+        <param name="angularUpdate" value="0.1"/>
+        <param name="temporalUpdate" value="-1.0"/>
+        <param name="resampleThreshold" value="0.5"/>
+        <param name="particles" value="80"/>
+        <param name="xmin" value="-10.0"/>
+        <param name="ymin" value="-10.0"/>
+        <param name="xmax" value="10.0"/>
+        <param name="ymax" value="10.0"/>
+        <param name="delta" value="0.05"/>
+        <param name="llsamplerange" value="0.01"/>
+        <param name="llsamplestep" value="0.01"/>
+        <param name="lasamplerange" value="0.005"/>
+        <param name="lasamplestep" value="0.005"/>
+    </node>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="depth_camera_tf"
+          args="0.16 0.0 0.4625 -1.57 0 -1.57 base_link depth_camera"
+          output="screen">
+        <param name="publish_frequency" value="50.0"/>
+    </node>
+
+
+    <!-- ===== Rviz可视化 ===== -->
+    <node pkg="rviz" type="rviz" name="rviz" output="screen"
+          args="-d /home/zj/graduate_design/src/ucar_nav/rviz/fusion_mapping.rviz"
+          launch-prefix="bash -c 'sleep 4; $0 $@'"/>
+
+</launch>

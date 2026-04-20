@@ -1,0 +1,276 @@
+<?xml version="1.0"?>
+<robot name="drawer_system" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- 抽屉组件1 - 使用DAE格式的mesh碰撞体 -->
+  <link name="drawer">
+    <visual>
+      <geometry>
+        <!-- 替换为DAE文件 -->
+        <mesh filename="package://zj_base/meshes/mdae.dae"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="drawer_material">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <!-- 替换为DAE文件 -->
+        <mesh filename="package://zj_base/meshes/mdae.dae"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <surface>
+        <contact>
+          <ode>
+            <soft_cfm>0.0</soft_cfm>
+            <soft_erp>0.2</soft_erp>
+            <kp>1e12</kp>        <!-- 大幅增加接触刚度防止穿透 -->
+            <kd>1000</kd>         <!-- 增加接触阻尼 -->
+            <max_vel>10.0</max_vel>      <!-- 增加最大接触速度 -->
+            <min_depth>0.0001</min_depth>  <!-- 减小最小穿透深度 -->
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>          <!-- 增加摩擦系数 -->
+            <mu2>0.8</mu2>
+            <slip1>0.0</slip1>
+            <slip2>0.0</slip2>
+            <fdir1>1 0 0</fdir1>
+          </ode>
+        </friction>
+        <bounce>
+          <restitution_coefficient>0.0</restitution_coefficient>
+          <threshold>1.0</threshold>
+        </bounce>
+      </surface>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="2.0"/>         <!-- 适当增加质量提高稳定性 -->
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="drawer2base_link" type="prismatic">
+    <parent link="base_link"/>
+    <child link="drawer"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="1000" lower="0" upper="0.2" velocity="2.0"/>  <!-- 增加effort -->
+    <dynamics damping="0.1" friction="0.0"/>  <!-- 适当增加阻尼 -->
+  </joint>
+
+  <gazebo reference="drawer">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+    <mu1>1.0</mu1>               <!-- 增加摩擦 -->
+    <mu2>0.8</mu2>
+    <kp>1e12</kp>               <!-- 大幅增加接触刚度 -->
+    <kd>1000.0</kd>             <!-- 增加接触阻尼 -->
+    <minDepth>0.0001</minDepth>  <!-- 减小最小穿透深度 -->
+    <maxVel>10.0</maxVel>        <!-- 增加最大接触速度 -->
+    <laserRetro>0</laserRetro>
+  </gazebo>
+
+  <gazebo reference="drawer2base_link">
+    <stopCfm>0.0</stopCfm>
+    <stopErp>0.9</stopErp>       <!-- 增加ERP提高约束精度 -->
+    <provideFeedback>true</provideFeedback>
+    <physics>
+      <ode>
+        <limit>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>         <!-- 增加ERP -->
+        </limit>
+        <fdir1>1 0 0</fdir1>
+        <friction>1.0 0.8 0.0</friction>  <!-- 增加摩擦 -->
+        <suspension>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>
+        </suspension>
+      </ode>
+    </physics>
+  </gazebo>
+
+  <!-- 抽屉组件2 - 保持STL格式 -->
+  <link name="drawer2">
+    <visual>
+      <geometry>
+        <mesh filename="package://zj_base/meshes/box2.dae"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="drawer_material">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://zj_base/meshes/box2.dae"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <surface>
+        <contact>
+          <ode>
+            <soft_cfm>0.0</soft_cfm>
+            <soft_erp>0.2</soft_erp>
+            <kp>1e12</kp>
+            <kd>1000</kd>
+            <max_vel>10.0</max_vel>
+            <min_depth>0.0001</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>0.8</mu2>
+            <slip1>0.0</slip1>
+            <slip2>0.0</slip2>
+            <fdir1>1 0 0</fdir1>
+          </ode>
+        </friction>
+        <bounce>
+          <restitution_coefficient>0.0</restitution_coefficient>
+          <threshold>1.0</threshold>
+        </bounce>
+      </surface>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="drawer22base_link" type="prismatic">
+    <parent link="base_link"/>
+    <child link="drawer2"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="1000" lower="0" upper="0.2" velocity="2.0"/>
+    <dynamics damping="0.1" friction="0.0"/>
+  </joint>
+
+  <gazebo reference="drawer2">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+    <mu1>1.0</mu1>
+    <mu2>0.8</mu2>
+    <kp>1e12</kp>
+    <kd>1000.0</kd>
+    <minDepth>0.0001</minDepth>
+    <maxVel>10.0</maxVel>
+    <laserRetro>0</laserRetro>
+  </gazebo>
+
+  <gazebo reference="drawer22base_link">
+    <stopCfm>0.0</stopCfm>
+    <stopErp>0.9</stopErp>
+    <provideFeedback>true</provideFeedback>
+    <physics>
+      <ode>
+        <limit>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>
+        </limit>
+        <fdir1>1 0 0</fdir1>
+        <friction>1.0 0.8 0.0</friction>
+        <suspension>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>
+        </suspension>
+      </ode>
+    </physics>
+  </gazebo>
+
+  <!-- 抽屉组件3 - 保持STL格式 -->
+  <link name="drawer3">
+    <visual>
+      <geometry>
+        <mesh filename="package://zj_base/meshes/box3.dae"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <material name="drawer_material">
+        <color rgba="0.8 0.8 0.8 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <mesh filename="package://zj_base/meshes/box3.dae"/>
+      </geometry>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <surface>
+        <contact>
+          <ode>
+            <soft_cfm>0.0</soft_cfm>
+            <soft_erp>0.2</soft_erp>
+            <kp>1e12</kp>
+            <kd>1000</kd>
+            <max_vel>10.0</max_vel>
+            <min_depth>0.0001</min_depth>
+          </ode>
+        </contact>
+        <friction>
+          <ode>
+            <mu>1.0</mu>
+            <mu2>0.8</mu2>
+            <slip1>0.0</slip1>
+            <slip2>0.0</slip2>
+            <fdir1>1 0 0</fdir1>
+          </ode>
+        </friction>
+        <bounce>
+          <restitution_coefficient>0.0</restitution_coefficient>
+          <threshold>1.0</threshold>
+        </bounce>
+      </surface>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="2.0"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="drawer32base_link" type="prismatic">
+    <parent link="base_link"/>
+    <child link="drawer3"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <axis xyz="1 0 0"/>
+    <limit effort="1000" lower="0" upper="0.2" velocity="2.0"/>
+    <dynamics damping="0.1" friction="0.0"/>
+  </joint>
+
+  <gazebo reference="drawer3">
+    <material>Gazebo/Grey</material>
+    <selfCollide>true</selfCollide>
+    <mu1>1.0</mu1>
+    <mu2>0.8</mu2>
+    <kp>1e12</kp>
+    <kd>1000.0</kd>
+    <minDepth>0.0001</minDepth>
+    <maxVel>10.0</maxVel>
+    <laserRetro>0</laserRetro>
+  </gazebo>
+
+  <gazebo reference="drawer32base_link">
+    <stopCfm>0.0</stopCfm>
+    <stopErp>0.9</stopErp>
+    <provideFeedback>true</provideFeedback>
+    <physics>
+      <ode>
+        <limit>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>
+        </limit>
+        <fdir1>1 0 0</fdir1>
+        <friction>1.0 0.8 0.0</friction>
+        <suspension>
+          <cfm>0.0</cfm>
+          <erp>0.9</erp>
+        </suspension>
+      </ode>
+    </physics>
+  </gazebo>
+
+</robot>

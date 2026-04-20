@@ -1,0 +1,82 @@
+<robot name="laser" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- 雷达支架 -->
+    <xacro:property name="support_length" value="0.05" /> <!-- 支架长度 -->
+    <xacro:property name="support_radius" value="0.01" /> <!-- 支架半径 -->
+    <xacro:property name="support_x" value="0.0" /> <!-- 支架安装的x坐标 -->
+    <xacro:property name="support_y" value="0.0" /> <!-- 支架安装的y坐标 -->
+    <xacro:property name="support_z" value="${earth_space + base_link_length + support_length / 2}" /> <!-- 支架安装的z坐标:底盘高度 / 2 + 支架高度 / 2  -->
+
+
+    
+
+    <link name="suport">
+        <visual>
+            <geometry>
+                <cylinder radius="${support_radius}" length="${support_length}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+            <material name="grey">
+                <color rgba="0.5 0.5 0.5 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${support_radius}" length="${support_length}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 0"/>
+            <mass value="0.1"/>
+            <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+        </inertial>
+    </link>
+
+    <joint name="support2base_link" type="fixed">
+        <parent link="base_link"/>
+        <child link="suport"/>
+        <origin xyz="0 0 ${base_link_length/2 + support_length/2}" rpy="0 0 0"/>
+    </joint>
+
+
+
+    <!-- 雷达主体 -->
+    <xacro:property name="PI" value="3.141"/>
+    <xacro:property name="laser_radius" value="0.05"/>
+    <xacro:property name="laser_height" value="0.02"/>
+
+    <link name="laser">
+        <visual>
+            <geometry>
+                <cylinder radius="${laser_radius}" length="${laser_height}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <material name="black">
+                <color rgba="0.0 0.0 0.0 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${laser_radius}" length="${laser_height}"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 0"/>
+            <mass value="0.2"/>
+            <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+        </inertial>
+
+
+    </link>
+
+    <joint name="laser2support" type="fixed">
+        <parent link="suport"/>
+        <child link="laser"/>
+        <origin xyz="0 0 ${support_length/2 + laser_height/2}" rpy="0 0 0"/>
+    </joint>
+
+
+
+</robot>

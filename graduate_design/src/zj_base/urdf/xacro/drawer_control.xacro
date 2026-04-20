@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot name="drawer_control" xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <!-- 抽屉传动装置宏 - Effort接口 -->
+  <xacro:macro name="drawer_transmission" params="joint_name">
+    <transmission name="${joint_name}_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${joint_name}_motor">
+        <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
+  <!-- 为所有抽屉应用传动装置 -->
+  <xacro:drawer_transmission joint_name="drawer2base_link"/>
+  <xacro:drawer_transmission joint_name="drawer22base_link"/>
+  <xacro:drawer_transmission joint_name="drawer32base_link"/>
+
+  <!-- Gazebo插件配置 - 如果还没有在其他地方配置的话 -->
+  <!-- <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+      <controlPeriod>0.001</controlPeriod>
+    </plugin>
+  </gazebo> -->
+
+</robot>

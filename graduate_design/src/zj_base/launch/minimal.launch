@@ -1,0 +1,30 @@
+<launch>
+    <!-- 将 Urdf 文件的内容加载到参数服务器 -->
+    <param name="robot_description" command="$(find xacro)/xacro $(find zj_base)/urdf/robot.urdf" />
+    
+    <!-- 启动 gazebo -->
+    <include file="$(find aws_robomaker_hospital_world)/launch/view_hospital.launch" />
+
+    <!-- 在 gazebo 中显示机器人模型 -->
+    <node pkg="gazebo_ros" type="spawn_model" name="model" args="-urdf -model mycar -param robot_description -x 1.0 -y 2.0 -z 0.1 -R 0.0 -P 0.0 -Y 1.57" />
+    
+
+    <!-- 加载所有控制器配置 -->
+    <rosparam file="$(find zj_base)/config/all_controllers.yaml" command="load"/>
+
+    <!-- 启动控制器管理器 -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+          output="screen" 
+          args="joint_state_controller
+                mobile_base_controller
+                drawer1_controller 
+                drawer2_controller 
+                drawer3_controller"/>
+
+    <!-- 启动机器人状态发布器（必须在控制器之后） -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    
+    <!-- 启动抽屉控制节点 -->
+    <node name="drawer_control_node" pkg="zj_base" type="drawer_control_node.py" output="screen"/>
+    <!-- <node name="set_initial_drawer_position" pkg="zj_base" type="set_initial_position.py"/> -->
+</launch>

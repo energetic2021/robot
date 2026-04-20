@@ -1,0 +1,3 @@
+/home/zj/桌面/毕业设计/Linux_aiui6.8.0003.0008_9449f0a6/samples/build_x64/CMakeFiles/rebuild_cache.dir
+/home/zj/桌面/毕业设计/Linux_aiui6.8.0003.0008_9449f0a6/samples/build_x64/CMakeFiles/edit_cache.dir
+/home/zj/桌面/毕业设计/Linux_aiui6.8.0003.0008_9449f0a6/samples/build_x64/CMakeFiles/aiui_sample.dir
