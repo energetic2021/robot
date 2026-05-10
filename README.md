@@ -103,6 +103,23 @@ npm run dev
 
 ## 📸 项目演示
 
+![控制系统](images/README/控制系统.png)
+
+系统控制架构
+
+
+![发药送药流程](images/README/发药送药流程.gif)
+
+
+发药送药流程演示
+
+
+![取松物流程](images/README/取松物流程.gif)
+
+
+取送物流程演示
+
+
 ![1776064271595](images/README/1776064271595.png)
 
 [<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116551386733487&bvid=BV1Xf5E61ECn&cid=38244585279&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>](https://www.bilibili.com/video/BV1Xf5E61ECn/?vd_source=2db0a2c913062d3711607d3e8ab73ab6)
