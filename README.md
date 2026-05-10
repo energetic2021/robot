@@ -74,7 +74,7 @@ roslaunch ros_service take_websocket.launch
 # 启动语音服务
 roslaunch voice_service aiui.launch
 # 启动智能取送物服务
-rosrun hospital_transport  transport.launch
+roslaunch hospital_transport  transport.launch
 ```
 
 ### 4. 启动后端 (Spring Boot)
