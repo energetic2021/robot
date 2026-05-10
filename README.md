@@ -102,6 +102,7 @@ npm run dev
 * **ROS 连接**：在后端 `RosConfig.java` 中配置 `rosbridge` 的地址（默认为 `ws://localhost:9090`）。
 
 ## 📸 项目演示
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116551504105529&bvid=BV1G25H6HEHZ&cid=38244846555&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
 
 ![1776064271595](images/README/1776064271595.png)
 
