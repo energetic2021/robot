@@ -103,27 +103,7 @@ npm run dev
 
 ## 📸 项目演示
 
-![控制系统](images/README/控制系统.png)
-
-系统控制架构
-
-
-![发药送药流程](images/README/发药送药流程.gif)
-
-
-发药送药流程演示
-
-
-![取松物流程](images/README/取松物流程.gif)
-
-
-取送物流程演示
-
-
 ![1776064271595](images/README/1776064271595.png)
-
-[<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116551386733487&bvid=BV1Xf5E61ECn&cid=38244585279&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>](https://www.bilibili.com/video/BV1Xf5E61ECn/?vd_source=2db0a2c913062d3711607d3e8ab73ab6)
-
 
 机器人模型
 
@@ -145,15 +125,9 @@ npm run dev
 
 ![1776064385326](images/README/1776064385326.png)
 
-
-[<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116551353113560&bvid=BV1tM5J6zE9a&cid=38244518416&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>](https://www.bilibili.com/video/BV1tM5J6zE9a/?vd_source=2db0a2c913062d3711607d3e8ab73ab6)
-
-
 网页端发药成功并配送后返回状态
 
 ![1776064998884](images/README/1776064998884.png)
-
-【语音控制流程】 https://www.bilibili.com/video/BV1tM5J6zEkz/?share_source=copy_web&vd_source=60111a14f3e8b1c4416ed65eda53ff3f
 
 语音识别成功，并播报结果
 
