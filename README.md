@@ -1,4 +1,4 @@
-# 基于多传感器融合的医院管理与机器人系统
+# 基于多传感器融合的医院管理与机器人系统 (毕业设计)
 
 这是一个集成了医院日常管理、机器人自动化运输、语音交互及 Gazebo 仿真于一体的综合性毕业设计项目。
 
@@ -74,7 +74,7 @@ roslaunch ros_service take_websocket.launch
 # 启动语音服务
 roslaunch voice_service aiui.launch
 # 启动智能取送物服务
-roslaunch hospital_transport  transport.launch
+rosrun hospital_transport  transport.launch
 ```
 
 ### 4. 启动后端 (Spring Boot)
@@ -105,39 +105,43 @@ npm run dev
 
 ![1776064271595](images/README/1776064271595.png)
 
-机器人模型
 
+<iframe src="https://player.bilibili.com/player.html?isOutside=true&aid=116551386733487&bvid=BV1Xf5E61ECn&cid=38244585279&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
+
+机器人模型
 
 ![1776064292815](images/README/1776064292815.png)
 
-
 仿真场景
-
-
 
 ![1776064325560](images/README/1776064325560.png)
 
 网页端机器人管理页
 
-
-
 ![1776064344510](images/README/1776064344510.png)
 
 网页端机器人控制选项
-
-
 
 ![1776064363060](images/README/1776064363060.png)
 
 网页端新建处方后等待发药状态
 
-
 ![1776064385326](images/README/1776064385326.png)
+
+
+<iframe src="https://player.bilibili.com/player.html?isOutside=true&aid=116551353113560&bvid=BV1tM5J6zE9a&cid=38244518416&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
 
 网页端发药成功并配送后返回状态
 
-
 ![1776064998884](images/README/1776064998884.png)
+
+
+<iframe src="https://player.bilibili.com/player.html?isOutside=true&aid=116551353112663&bvid=BV1tM5J6zEkz&cid=38244516727&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
 
 语音识别成功，并播报结果
 
+**作者**: 现代信息产业学院-计算机科学与技术专业（产教融合创新班）-计科迅飞2203班-张杰-202212060103
+**联系方式**:2318449734@qq.com
+**日期**: 2026-04-13
