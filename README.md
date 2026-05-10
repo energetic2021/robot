@@ -136,8 +136,7 @@ npm run dev
 
 ![1776064998884](images/README/1776064998884.png)
 
-
-[[<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=116551353112663&bvid=BV1tM5J6zEkz&cid=38244516727&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>](https://www.bilibili.com/video/BV1tM5J6zEkz/?vd_source=2db0a2c913062d3711607d3e8ab73ab6)](https://www.bilibili.com/video/BV1tM5J6zEkz/?vd_source=2db0a2c913062d3711607d3e8ab73ab6)
+【语音控制流程】 https://www.bilibili.com/video/BV1tM5J6zEkz/?share_source=copy_web&vd_source=60111a14f3e8b1c4416ed65eda53ff3f
 
 语音识别成功，并播报结果
 
